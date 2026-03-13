@@ -17,9 +17,9 @@ def saveimage_vol(data_object): #defines your inputs
 	volrendset = hx_project.create('HxVolumeRenderingSettings')
 	volrendset.ports.data.connect(hx_project.get(name))
 	volrend.ports.volumeRenderingSettings.connect(hx_project.get('Volume Rendering Settings'))
-	volrend.ports.colormap.connect(hx_project.get('labels256.am'))
 	volrendset.ports.rendering.selected = 1
 	volrendset.fire()
+	volrend.ports.colormap.connect(hx_project.get('labels256.am'))
 	volrend.fire()
 	hx_viewer_manager.viewers[0].camera.view_direction = (0.2411387860774994, 0.904574453830719, -0.3515639901161194)
 	hx_viewer_manager.viewers[0].camera.position=(1024.7874755859375, -2550.55908203125, 2749.4658203125)
