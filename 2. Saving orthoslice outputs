@@ -1,0 +1,76 @@
+name = 'YOUR DATA'
+path = 'YOUR PATH TO SAVE DATA'
+def saveimage_col(data_object, path1,path2,path3,path4,slicen1,slicen2, slicen3): #defines your inputs
+	ortho =  hx_project.create('HxOrthoSlice') #make the function ortho
+	ortho.ports.data.connect(data_object)
+	ortho.fire()
+	ortho.ports.colormap.connect(hx_project.get('labels256.am'))#color of the slices
+	ortho.fire()
+	ortho.ports.sliceOrientation.selected=0 #view in the xy orientation
+	ortho.fire()	
+	ortho.ports.sliceNumber.value=slicen1 #slicenumber
+	ortho.fire()
+	snapshot = hx_project.create('HxSnapshotModule') #this makes the snapshot module
+	snapshot.ports.input.connect(data_object)
+	port_save=snapshot.ports.snapPath
+	port_save.filenames=path1+path2 #defines the filepath and name for saving
+	snapshot.fire()
+	snapshot.ports.action.was_hit=True 
+	snapshot.fire()
+
+	ortho.ports.sliceOrientation.selected=1 #xz orientaion
+	ortho.fire()	
+	ortho.ports.sliceNumber.value=slicen2 #slicenumber
+	ortho.fire()
+	port_save.filenames=path1+path3
+	snapshot.fire()
+	snapshot.ports.action.was_hit=True 
+	snapshot.fire()
+
+	ortho.ports.sliceOrientation.selected=2 #yz orientation
+	ortho.fire()	
+	ortho.ports.sliceNumber.value=slicen3 #slicenumber
+	ortho.fire()
+	port_save.filenames=path1+path4
+	snapshot.fire()
+	snapshot.ports.action.was_hit=True 
+	snapshot.fire()
+
+name  = NAME OF YOUR DATA #e.g. '0073_voi1.am' - you need the quote
+saveimage_col(hx_project.get(name), path, name+'_xy.tiff',name+'_xz.tiff',name+'_yz.tiff', 123, 200, 300)
+
+
+##### FOR BETTER QUALITY IMAGES ######
+#I found the snapshot module in Avizo Py did not give me good images so the camera function in the viewer is better for higher quality images
+#hx_viewer_manager.viewers[0].snapshot(filename = path+'test.jpg', offscreen=True, offscreen_size=(3000,3000)) 
+#you can play with the offscreen size a bit. 3000 is quite high already!!
+#you can also change to .png, .tiff, etc
+
+def saveimage_col(data_object, slicen1,slicen2, slicen3): #defines your inputs
+	ortho =  hx_project.create('HxOrthoSlice') #make the function ortho
+	ortho.ports.data.connect(data_object)
+	ortho.fire()
+	ortho.ports.colormap.connect(hx_project.get('labels256.am'))#color of the slices
+	ortho.fire()
+	ortho.ports.sliceOrientation.selected=0 #view in the xy orientation
+	ortho.fire()	
+	ortho.ports.sliceNumber.value=slicen1 #slicenumber
+	ortho.fire()
+	hx_viewer_manager.viewers[0].snapshot(filename = path+name+'xy.jpg', offscreen=True, offscreen_size=(3000,3000))
+
+	ortho.ports.sliceOrientation.selected=1 #xz orientaion
+	ortho.fire()	
+	ortho.ports.sliceNumber.value=slicen2 #slicenumber
+	ortho.fire()
+	hx_viewer_manager.viewers[0].snapshot(filename = path+name+'xz.jpg', offscreen=True, offscreen_size=(3000,3000))
+
+	ortho.ports.sliceOrientation.selected=2 #yz orientation
+	ortho.fire()	
+	ortho.ports.sliceNumber.value=slicen3 #slicenumber
+	ortho.fire()
+	hx_viewer_manager.viewers[0].snapshot(filename = path+name+'yz.jpg', offscreen=True, offscreen_size=(3000,3000))
+
+
+name  = NAME OF YOUR DATA #e.g. '0073_voi1.am' - you need the quote
+path = 'your path' 
+saveimage_col(hx_project.get(name), 960,1280, 1280)

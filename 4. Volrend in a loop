@@ -1,0 +1,41 @@
+#so within my folder 19CJ15_cl5_zoom I have 3 subfolers called voi1, voi2, and voi3. Within each of these I have an .am file called voi1.am or voi2.am or voi3.am
+
+
+#load in pathways and names
+load_path = 'F:/PROCESSING/VSN_PRO/19CJ14_cl5_zoom/'
+path = 'F:/PROCESSING/VSN_PRO/19CJ14_cl5_zoom/Images/'
+vois = ('voi1','voi2','voi3')
+
+#define the script
+def saveimage_vol(data_object): #defines your inputs
+	volrend = hx_project.create('HxVolumeRender2')
+	volrendset = hx_project.create('HxVolumeRenderingSettings')
+	volrendset.ports.data.connect(hx_project.get(name))
+	volrend.ports.volumeRenderingSettings.connect(hx_project.get('Volume Rendering Settings'))
+	volrend.ports.colormap.connect(hx_project.get('labels256.am'))
+	volrendset.ports.rendering.selected = 1
+	volrendset.fire()
+	volrend.ports.colormap.connect(hx_project.get('labels256.am'))
+	volrend.fire()
+	hx_viewer_manager.viewers[0].snapshot(filename = path+name+'_vol.jpg', offscreen=True, offscreen_size=(3000,3000))
+	
+	ortho =  hx_project.create('HxOrthoSlice') 
+	ortho.ports.data.connect(hx_project.get(name))
+	ortho.ports.sliceOrientation.selected=1 #xz orientaion
+	ortho.fire()
+	ortho.clip_objects()
+	ortho.viewer_mask = 0
+	ortho.fire()
+	hx_viewer_manager.viewers[0].snapshot(filename = path+name+'_vol sliced.jpg', offscreen=True, offscreen_size=(5000,5000))
+	hx_project.remove(ortho) #removes the orthoslice so the next iteration doesn't have it in the viewer!
+	hx_project.remove(volrend)
+	hx_project.remove(volrendset)
+
+#run it as a loop!
+for x in vois:
+	name = x+'.am'
+	print(name)
+	hx_project.load(load_path+x+'/'+x+'.am')
+	saveimage_vol(hx_project.get(name))
+
+    

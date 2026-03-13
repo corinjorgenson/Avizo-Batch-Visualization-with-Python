@@ -1,0 +1,30 @@
+# load in an orthoslice
+ortho =  hx_project.create('HxOrthoSlice') #make the orthoslice appear in the project window
+ortho.ports.data.connect('0037_cropped.am') #connect it to your data
+ortho.fire() #make it appear in the viewer!
+
+ortho.ports.colormap.connect(hx_project.get('grey.am'))
+ortho.fire()
+
+ortho.ports.colormap.range = (-2e-03, 3e-03)
+ortho.fire()
+
+ortho.ports.sliceNumber.value=123
+ortho.fire()
+
+ortho.ports.sliceOrientation.selected = 2 
+ortho.fire()  
+# 0 = xy; 1 = xz; 2 = yz
+
+####you can also make this into a single command/function
+
+def grey_ortho(data_object, min_range, max_range):
+	ortho =  hx_project.create('HxOrthoSlice')
+	ortho.ports.data.connect(data_object)
+	ortho.fire()
+	ortho.ports.colormap.connect(hx_project.get('grey.am'))
+	ortho.fire()
+	ortho.ports.slicenum.connect(hx_project.get('grey.am'))
+	ortho.fire()
+	
+grey_ortho(hx_project.get('0037_cropped.am'), -2e-03, 3e-03)

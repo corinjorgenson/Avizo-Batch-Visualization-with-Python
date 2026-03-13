@@ -1,0 +1,29 @@
+name = 'YOUR DATA'
+path = 'YOUR PATH TO SAVE DATA'
+#note: the camera.view.direction and .position you might want to play around with
+#I reccomend that you do a test with your data to see what works best for you and then run print(hx_viewer_manager.viewers[0].camera.view_direction) to get the correct values
+
+
+def saveimage_vol(data_object): #defines your inputs
+	volrend = hx_project.create('HxVolumeRender2')
+	volrendset = hx_project.create('HxVolumeRenderingSettings')
+	volrendset.ports.data.connect(hx_project.get(name))
+	volrend.ports.volumeRenderingSettings.connect(hx_project.get('Volume Rendering Settings'))
+	volrend.ports.colormap.connect(hx_project.get('labels256.am'))
+	volrendset.ports.rendering.selected = 1
+	volrendset.fire()
+	volrend.fire()
+	hx_viewer_manager.viewers[0].camera.view_direction = (0.2411387860774994, 0.904574453830719, -0.3515639901161194)
+	hx_viewer_manager.viewers[0].camera.position=(1024.7874755859375, -2550.55908203125, 2749.4658203125)
+	hx_viewer_manager.viewers[0].snapshot(filename = path+name+'_vol.jpg', offscreen=True, offscreen_size=(3000,3000))
+	
+    #to make a volrend with a slice through it
+	ortho =  hx_project.create('HxOrthoSlice') 
+	ortho.ports.data.connect(hx_project.get(name))
+	ortho.ports.sliceOrientation.selected=1 #xz orientaion
+	ortho.fire()
+	ortho.clip_objects()
+	ortho.viewer_mask = 0
+	ortho.fire()
+	hx_viewer_manager.viewers[0].snapshot(filename = path+name+'_vol sliced.jpg', offscreen=True, offscreen_size=(5000,5000))
+saveimage_vol(hx_project.get(name))
