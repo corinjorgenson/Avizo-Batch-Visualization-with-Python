@@ -1,5 +1,7 @@
 # Avizo-Batch-Visualization-with-Python
 Avizo Batch Visualization with Python
+NOTE: This is a work in progress. I will likely add more codes as I learn how to do more things
+
 Avizo has a python console which can be used for ease of batch processes.
 
 Avizo's documentation for utilizing this feature is a bit spare so here are some basic information that I found through trial and error. I recommend starting with Avizo's Youtube video on using the Python console https://www.youtube.com/watch?v=tUlZFJj-aYs. The Avizo Help Docs (access through Avizo's Help dropdown), while slightly buried, has some good descriptions.
@@ -19,5 +21,5 @@ Here is some basics/tips of how to run the Python console. Otherwise in this rep
 - Modules get connected via module.ports.data.connect(hx_project.get(YOUR DATA)). (e.g. volrendset.ports.data.connect(hx_project.get(name))). 
 - To get things to populate in the viewer you usually need to run XYZ.fire() (e.f. ortho.fire()). 
 
-- All else fails there is always help()) to see some documentation
+- All else fails there is always help() to see some documentation
 
