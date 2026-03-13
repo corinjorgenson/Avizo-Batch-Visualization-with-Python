@@ -4,6 +4,14 @@ path = 'YOUR PATH TO SAVE DATA'
 #I reccomend that you do a test with your data to see what works best for you and then run print(hx_viewer_manager.viewers[0].camera.view_direction) to get the correct values
 
 
+##IMAGE QUALITY NOTE: If you are using Avizo 2024.2 or lower you might have issues with the pixelation.  You can fix this via 
+#a.	Open the Tcl Console.
+#b.	Type: create HxLDAExpertSettings
+#c.	Press Enter.
+#d.	Enable Fixed Resolution
+#Thanks to Avizo Engineer for the help on that :) 
+
+
 def saveimage_vol(data_object): #defines your inputs
 	volrend = hx_project.create('HxVolumeRender2')
 	volrendset = hx_project.create('HxVolumeRenderingSettings')
