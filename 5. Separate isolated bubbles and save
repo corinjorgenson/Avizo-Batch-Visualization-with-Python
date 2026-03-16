@@ -1,0 +1,34 @@
+##### This code takes a binary file of bubbles (voi1.am) and seperates the largest connected bubble from the others and saves this
+
+name = 'voi1'
+your_path = 'F:/PROCESSING/VSN_PRO/19CJ14_cl5_zoom/voi1/'
+
+def isobubs(data_object):
+	fil = hx_project.create('measurefilter') #Filter by measure module
+	fil.ports.inputImage.connect(data_object) #connect to your data
+	fil.ports.inputIntensityImage.connect(data_object) #connect to your data
+	fil.ports.measure.measure_name = 'Volume3d' #what measure to filter on the basis of
+	fil.ports.doIt.was_hit = True 
+	fil.fire()
+	hx_project.get( name + '.labels').name = 'large' #rename the output
+	
+	from _hx_core import _tcl_interp #call in the tcl interpreter
+	data = hx_project.get('large') #your data
+	file_path = your_path + "large.am" #where you will save to and what you will call it
+	_tcl_interp(f'{data.name} save "Amira binary" {file_path}') #the saving 
+
+	ari=hx_project.create('HxArithmetic') #open up the Arithmetic module
+	ari.ports.inputA.connect(hx_project.get(name+'.am')) #Input A
+	ari.ports.inputB.connect(hx_project.get('large.am')) #Input B
+	ari.fire() 
+	ari.ports.resultType.selected = 0 #Type of result. 0== binary
+	ari.ports.expr0.text = ('A-B') #the expression for the arithemtic calculation 
+	ari.fire()
+	ari.execute() #these are the isolated bubbles!
+
+	data = hx_project.get('Result') #save this result as above
+	file_path = your_path + "Result.am"
+	_tcl_interp(f'{data.name} save "Amira binary" {file_path}')
+
+isobubs(hx_project.get(name+'.am')) #run it
+
