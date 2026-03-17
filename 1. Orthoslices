@@ -1,6 +1,6 @@
 # load in an orthoslice
 ortho =  hx_project.create('HxOrthoSlice') #make the orthoslice appear in the project window
-ortho.ports.data.connect('0037_cropped.am') #connect it to your data
+ortho.ports.data.connect(hx_project.get('0037_cropped.am')) #connect it to your data
 ortho.fire() #make it appear in the viewer!
 
 ortho.ports.colormap.connect(hx_project.get('grey.am'))
