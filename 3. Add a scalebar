@@ -1,0 +1,18 @@
+#add a scalebar to the viewer
+scale = hx_project.create('HxScale') #adds the module to the project view
+scale.ports.data.connect(hx_project.get('voi1.am')) #connect it to your data
+scale.ports.frame.toggles[0].checked=1 #this changes the first box you see to check it. So keeps the x-axis
+scale.ports.frame.toggles[1].checked=0 #removes the Y axis
+scale.fire()
+scale.ports.posY.value =0.1 #this moves the Y position of the x axis
+scale.fire()
+
+#change the colour of the a scalebar. This must be done via the TCL console
+from _hx_core import _tcl_interp
+command = f"{scale.name} color setColor 0 0 0 0"
+_tcl_interp(command)
+scale.fire()
+
+command = f"{scale.name} font setFontColor 0 0 0"
+_tcl_interp(command)
+scale.fire()
